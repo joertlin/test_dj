@@ -1,5 +1,6 @@
 #from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
+from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext, loader
 
 from .models import Question
@@ -14,7 +15,12 @@ def index(request):
 	#return HttpResponse("Hello, world. You're at the polls index.")
 
 def detail(request, question_id):
-	return HttpResponse("You're looking at question %s." % question_id)
+	question = get_object_or_404(Question, pk = question_id)
+	#except:
+	#	raise Http404("Question does not exist.")
+
+	return render(request, 'polls/detail.html', {'question': question})
+	#return("You're looking at question %s." % question_id)
 
 def results(request, question_id):
 	response =  "Your're looking at the results of question %s."
